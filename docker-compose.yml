@@ -1,0 +1,58 @@
+services:
+  app:
+    build: .
+    container_name: litace_app
+    ports:
+      - '3001:3000'
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    develop:
+      watch:
+        - path: ./src
+          target: /app/src
+          action: sync
+        - path: ./package.json
+          action: rebuild
+        - path: ./package-lock.json
+          action: rebuild
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: litace-postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: litace-pgadmin
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: litace_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+
+volumes:
+  postgres_data:
+  redis-data:

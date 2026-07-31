@@ -1,0 +1,26 @@
+# Dependencies (we’ll install fresh in container)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Docker files themselves (not needed in context)
+Dockerfile
+.dockerignore
+
+# Build artifacts
+dist
+coverage
+
+# Environment & secrets
+.env
+.env.*    # if you use multiple env files
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+*.md
